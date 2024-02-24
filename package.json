@@ -9,6 +9,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "puppeteer": "^22.2.0"
+    "puppeteer": "^22.2.0",
+    "base64-img": "^1.0.4",
+    "commander": "^3.0.1",
+    "html-minifier": "^4.0.0",
+    "images": "^3.0.2", 
+    "update-notifier": "^3.0.1",
+    "xutil": "^1.0.11"
   }
 }

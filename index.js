@@ -1,8 +1,18 @@
  
 const openPage = require('./openPage');
+const {
+  sleep,
+  genScriptContent,
+} = require("./util");
+const {
+  saveScreenShot,
+} = require('./saveFile');
+const insertSkeleton = require('./insertSkeleton');
+
 (async () => { 
   const options={
     pageUrl:'https://i.alibaba.com/ncms/pages/cnfm_v2.html',
+    outputPath:'out',
     cookies:{
       'XSRF-TOKEN':"a33b7049-a277-486c-abf6-3aff0e35bd3f",
       "cna": "gKk5HWYT1jMCASSheC8vw+uR",
@@ -50,7 +60,26 @@ const openPage = require('./openPage');
   }
   }
   const { page, browser } = await openPage(options);
-  await page.screenshot({path: 'example1.png'});
+
+   
+  const scriptContent = await genScriptContent(); 
+  await page.addScriptTag({ content: scriptContent });
+  await page.evaluate(async options => {
+    await window.AwesomeSkeleton.genSkeleton(options);
+  }, options);
+
+    // Screenshot and save as png and base64 txt files
+    const skeletonImageBase64 = await saveScreenShot(page, options);
+
+    // Inject the skeleton into the desired page
+    const result = insertSkeleton(skeletonImageBase64, options);
+  
+    // Close the browser
+    // await browser.close();
+  
+    return result;
+
+  // await page.screenshot({path: 'example1.png'});
 
   // await browser.close();
 })();
